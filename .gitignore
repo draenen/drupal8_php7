@@ -1,0 +1,8 @@
+.vagrant/
+ansible/roles/
+ansible/playbook.retry
+sites/
+
+# IDE and OS Metadata
+.DS_Store
+.directory

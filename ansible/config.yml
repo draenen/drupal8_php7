@@ -1,0 +1,98 @@
+---
+apache_vhosts:
+  - servername: "xhprof.drupal8-php7.dev"
+    documentroot: "{{ php_xhprof_html_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ php_xhprof_html_dir }}"
+
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - expires.load
+  - ssl.load
+  - rewrite.load
+  - proxy.load
+  - proxy_fcgi.load
+
+# Add any extra apt or yum packages you would like installed.
+extra_packages:
+  - sqlite
+
+drush_version: "master"
+drush_keep_updated: true
+drush_composer_cli_options: "--prefer-dist --no-interaction"
+
+firewall_allowed_tcp_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "81"
+  - "443"
+  - "4444"
+  - "8025"
+  - "8080"
+  - "8443"
+  - "8983"
+  - "9200"
+firewall_log_dropped_packets: false
+
+# PHP Configuration. Currently-supported versions: 5.6, 7.0.
+# To use 5.6, see: http://docs.drupalvm.com/en/latest/other/php-56/
+php_version: "7.0"
+php_opcache_enabled_in_ini: true
+php_opcache_memory_consumption: "192"
+php_opcache_max_accelerated_files: 4096
+php_max_input_vars: "4000"
+php_memory_limit: "256M"
+php_max_execution_time: "60"
+php_max_input_time: "60"
+php_max_input_vars: "1000"
+php_realpath_cache_size: "1024K"
+php_upload_max_filesize: "256M"
+php_post_max_size: "256M"
+php_date_timezone: "America/Denver"
+php_allow_url_fopen: "On"
+php_sendmail_path: "/opt/mailhog/mhsendmail"
+php_output_buffering: "4096"
+php_short_open_tag: false
+php_error_reporting: "E_ALL | E_DEPRECATED"
+php_display_errors: "On"
+php_display_startup_errors: "On"
+php_expose_php: "On"
+php_session_cookie_lifetime: 0
+php_session_gc_probability: 1
+php_session_gc_divisor: 1000
+php_session_gc_maxlifetime: 1440
+php_session_save_handler: files
+php_session_save_path: ''
+php_disable_functions: []
+
+# Drupal VM defaults to using PHP-FPM with either Apache or Nginx. If you wish
+# to instead use Apache + mod_php with an Ubuntu base box, make sure you add
+# libapache2-mod-php7.0 to `extra_packages` elsewhere in this config file.
+php_enable_php_fpm: true
+php_fpm_listen: "127.0.0.1:9000"
+
+composer_path: /usr/bin/composer
+composer_home_path: "/home/vagrant/.composer"
+composer_home_owner: "vagrant"
+composer_home_group: "vagrant"
+composer_global_packages:
+  - { name: hirak/prestissimo, release: '^0.3' }
+
+# MySQL Configuration.
+mysql_root_password: root
+mysql_slow_query_log_enabled: true
+mysql_slow_query_time: 2
+mysql_wait_timeout: 300
+
+# XDebug configuration. XDebug is disabled by default for better performance.
+php_xdebug_default_enable: 0
+php_xdebug_coverage_enable: 0
+php_xdebug_cli_enable: 1
+php_xdebug_remote_enable: 1
+php_xdebug_remote_connect_back: 1
+# Use PHPSTORM for PHPStorm, sublime.xdebug for Sublime Text.
+php_xdebug_idekey: PHPSTORM
+php_xdebug_max_nesting_level: 256
+
+known_hosts_path: ~/.ssh/known_hosts

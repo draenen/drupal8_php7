@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: yes
+
+  vars_files:
+    - config.yml
+
+  pre_tasks:
+    - name: Define config_dir.
+      set_fact:
+        config_dir: "{{ playbook_dir }}"
+      when: config_dir is not defined
+
+    - include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ config_dir }}/config.yml"
+
+    - include: tasks/init-debian.yml
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    # Essential roles.
+    - geerlingguy.firewall
+    - geerlingguy.git
+    - geerlingguy.postfix
+    - geerlingguy.apache
+    - geerlingguy.apache-php-fpm
+    - geerlingguy.mysql
+    - geerlingguy.php
+    - geerlingguy.php-pecl
+    - geerlingguy.php-mysql
+    - geerlingguy.composer
+    - geerlingguy.drush
+
+    # Optional roles.
+    - geerlingguy.drupal-console
+    - geerlingguy.memcached
+    - geerlingguy.php-memcached
+    - geerlingguy.php-xdebug
+    - geerlingguy.php-xhprof
+    - geerlingguy.daemonize
+    - geerlingguy.mailhog
+
+  tasks:
+    - include: tasks/sshd.yml
+    - include: tasks/extras.yml
+    - include: tasks/www.yml
+    - include: tasks/apparmor.yml
