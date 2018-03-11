@@ -9,8 +9,8 @@ vconfig = {
   "user" => "vagrant",
   "hostname" => "drupal8-php7.dev",
   "machine_name" => "drupal8_php7",
-  "ip" => "192.168.50.15",
-  "memory" => "1024",
+  "ip" => "192.168.50.30",
+  "memory" => "2048",
   "cpus" => "2"
 }
 

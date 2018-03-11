@@ -25,24 +25,32 @@
     - geerlingguy.postfix
     - geerlingguy.apache
     - geerlingguy.apache-php-fpm
-    - geerlingguy.mysql
+    - geerlingguy.php-versions
     - geerlingguy.php
     - geerlingguy.php-pecl
-    - geerlingguy.php-mysql
     - geerlingguy.composer
+    - geerlingguy.mysql
     - geerlingguy.drush
+    - geerlingguy.php-mysql
 
     # Optional roles.
     - geerlingguy.drupal-console
     - geerlingguy.memcached
     - geerlingguy.php-memcached
-    - geerlingguy.php-xdebug
-    - geerlingguy.php-xhprof
     - geerlingguy.daemonize
     - geerlingguy.mailhog
+
+    - role: geerlingguy.php-xdebug
+      workspace: "/root/php{{ php_version }}"
+
+    - role: geerlingguy.php-xhprof
+      workspace: "/root/php{{ php_version }}"
+
+    - role: thom8.php-upload-progress
+      workspace: "/root/php{{ php_version }}"
 
   tasks:
     - include: tasks/sshd.yml
     - include: tasks/extras.yml
+    - include: tasks/cron.yml
     - include: tasks/www.yml
-    - include: tasks/apparmor.yml
